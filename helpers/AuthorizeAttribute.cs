@@ -9,12 +9,10 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         var user = context.HttpContext.Items["User"];
-        Console.WriteLine("Author");
-
-        Console.WriteLine(user);
         if (user == null)
         {
             context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
         }
     }
+
 }

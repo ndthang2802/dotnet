@@ -9,6 +9,11 @@ namespace Application.entities
         
         public string UserId {get;set;}
 
+        public Conversation(string id, string name, string userId){
+            Id = id;
+            Name = name;
+            UserId = userId;
+        }
 
     }
 }

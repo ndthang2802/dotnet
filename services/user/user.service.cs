@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Application.model.Authentication;
+using Application.model.AppData;
 using Application.entities;
 using Application.helpers;
 using BC = BCrypt.Net.BCrypt;
@@ -9,20 +10,20 @@ namespace Application.services.user
 {
     public class UserService : IUserService
     {
-        private DataContext _dataContex;
+        private DataContext _dataContext;
 
         public UserService(DataContext dataContext)
         {
-            this._dataContex = dataContext;
+            this._dataContext = dataContext;
         }
 
         public bool Create(RegisterModel user)
         {
-            if (_dataContex.Users.Any(u=>u.username == user.username))
+            if (_dataContext.Users.Any(u=>u.username == user.username))
             {
                 throw new Exception("Username taken");
             }
-            if (_dataContex.Users.Any(u=>u.phoneNumber == user.phoneNumber))
+            if (_dataContext.Users.Any(u=>u.phoneNumber == user.phoneNumber))
             {
                 throw new Exception("Phone number taken");
             }
@@ -41,9 +42,9 @@ namespace Application.services.user
             db_user.RefreshTokenExpiryTime = DateTime.Now;
             
 
-            _dataContex.Users.Add(db_user);
+            _dataContext.Users.Add(db_user);
 
-            var state = _dataContex.SaveChanges();
+            var state = _dataContext.SaveChanges();
 
             if (state > 0)
             {
@@ -55,9 +56,10 @@ namespace Application.services.user
             }
 
         }
-        public List<User> GetUserBy()
+        public UserModel GetUserByUsername(string username)
         {
-            return _dataContex.Users.ToList();
+            User user =  _dataContext.Users.FirstOrDefault(u => u.username == username);
+            return  new UserModel(user.Id,user.username,user.phoneNumber,user.displayName);
         }
 
         

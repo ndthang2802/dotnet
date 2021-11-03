@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens; 
 using Application.services.token;
 using Application.Hubs;
-
+using Application.services.chat;
 namespace Application
 {
     public class Startup
@@ -58,6 +58,7 @@ namespace Application
 
             services.AddScoped<IUserService, UserService>();
             services.AddTransient<ITokenService, TokenService>();
+            services.AddScoped<IChatService,ChatService>();
 
             services.AddControllers();
 
