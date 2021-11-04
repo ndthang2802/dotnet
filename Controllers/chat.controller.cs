@@ -35,8 +35,11 @@ namespace Application.Controllers
 
         }
         [HttpPost("getCoversation")]
+        [Authorize]
 
-        public IActionResult getConversation(string username){
+        public IActionResult getConversation(){
+            var username = HttpContext.Items["User"].ToString();
+
             try {
                 var ConversationList = _chatService.getConversations(username);
                 return Ok(ConversationList);
@@ -48,11 +51,12 @@ namespace Application.Controllers
 
 
         [HttpPost("createDirectTalk")]
-
-        public IActionResult createDirectTalk(string username1,string username2)
+        [Authorize]
+        public IActionResult createDirectTalk([FromBody] CreateDirectTalk user2)
         {
+            var creatorUsername = HttpContext.Items["User"].ToString();
             try {
-                var Conversation = _chatService.createDirectTalk(username1,username2);
+                var Conversation = _chatService.createDirectTalk(creatorUsername,user2.Username);
                 return Ok(Conversation);
             }
             catch {

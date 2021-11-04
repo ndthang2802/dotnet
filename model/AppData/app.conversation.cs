@@ -29,8 +29,7 @@ namespace Application.model.AppData
 
     public class CreateDirectTalk
     {
-        public string Username1 { get; set; }
-        public string Username2 { get; set; }
+        public string Username { get; set; }
 
     }
 
