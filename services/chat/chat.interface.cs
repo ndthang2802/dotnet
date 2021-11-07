@@ -16,7 +16,8 @@ namespace Application.services.chat
 
        //List<ConversationModel> getConversations(string username);
        List<ConversationModel> getConversations(string username);
-
+    
+    
 
     }
 

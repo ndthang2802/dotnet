@@ -22,7 +22,7 @@ namespace Application.Hubs
             var c = Context.GetHttpContext();
             var user = c.Items["User"];
             //await Clients.All.SendAsync("ReceiveMessage",message);
-            await Clients.Group(group).SendAsync("Send", $"{user}: {message}.");
+            await Clients.Group(group).SendAsync("Send", $"{user}:{message}.");
         }
 
         public async Task AddToGroup(string GroupId)
@@ -32,7 +32,7 @@ namespace Application.Hubs
 
             await Groups.AddToGroupAsync(Context.ConnectionId, GroupId);
 
-            await Clients.Group(GroupId).SendAsync("Send", $"{Context.ConnectionId} has joined the group {GroupId}.");
+            await Clients.Group(GroupId).SendAsync("AddS", $"{Context.ConnectionId} has joined the group {GroupId}.");
         }
         // public async Task SendMessage(string GroupId, string message)
         // {

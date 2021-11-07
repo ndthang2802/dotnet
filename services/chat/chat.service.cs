@@ -72,6 +72,7 @@ namespace Application.services.chat
 
             UserModel p1 = new UserModel(user1.Id,user1.username,user1.phoneNumber,user1.displayName);
             UserModel p2 = new UserModel(user2.Id,user2.username,user2.phoneNumber,user2.displayName);
+
             Attendants.Add(p1);
             Attendants.Add(p2);
 
@@ -86,7 +87,8 @@ namespace Application.services.chat
             }
         }
         
-        public List<ConversationModel> getConversations(string username) {
+        public List<ConversationModel> getConversations(string username) 
+        {
 
             User user = _dataContext.Users.FirstOrDefault(u => u.username == username);
             var conversationList = _dataContext.Joins.ToList().GroupBy(j=>j.ConservationId,j => j.UserId,(key, g) => new {ConservationId = key, attendId = g.ToList() }).Where(j => j.attendId.Contains(user.Id));
