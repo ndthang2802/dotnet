@@ -83,19 +83,19 @@ namespace Application.services.token
                     };
 
                 var newaccessToken = GenerateAccessToken(claims,_config["Jwt:key"].ToString(),_config["Jwt:iss"].ToString());
-                var newrefreshToken = GenerateRefreshToken();
+                // var newrefreshToken = GenerateRefreshToken();
 
-                user.RefreshToken = newrefreshToken;
+                // user.RefreshToken = newrefreshToken;
 
-                var success = _dataContext.SaveChanges();
+                // var success = _dataContext.SaveChanges();
 
-                if (success > 0){
-                    return new TokenModel(newaccessToken,newrefreshToken);
-                }
+                // if (success > 0){
+                return new TokenModel(newaccessToken,user.RefreshToken);
+                // }
 
-                else {
-                    throw new Exception("fix later");
-                }
+                // else {
+                //     throw new Exception("fix later");
+                // }
             }
             catch (SecurityTokenException) {
                 throw new SecurityTokenException("Invalid token");
