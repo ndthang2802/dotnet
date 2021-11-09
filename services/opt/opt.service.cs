@@ -1,8 +1,4 @@
 using System;
-using System.Linq;
-using Application.model.Authentication;
-using Application.helpers;
-using BC = BCrypt.Net.BCrypt;
 namespace Application.services.opt
 {
     public class OptService

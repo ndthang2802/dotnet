@@ -1,13 +1,7 @@
 using Application.services.user;
-using Application.entities;
 using Microsoft.AspNetCore.Mvc;
-using Application.model.Authentication;
+using Application.model;
 using Application.model.AppData;
-
-using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-using System;
 namespace Application.Controllers
 {
 
@@ -45,12 +39,12 @@ namespace Application.Controllers
             }
             
         }
-        [HttpGet("user")]
-        
-        public IActionResult GetUser(string username)
+        [HttpGet("userInfo")]
+        [Authorize]
+        public IActionResult GetUserInfo()
         {
-            //List<User> user_l =  _userService.GetUserBy();
-            UserModel user = _userService.GetUserByUsername(username);
+            var userName = HttpContext.Items["User"];
+            UserModel user = _userService.GetUserByUsername(userName.ToString());
             return Ok(
                 user
             );

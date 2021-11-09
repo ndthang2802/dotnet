@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations; 
-using Application.model.Authentication;
 using System;
 namespace Application.entities
 {

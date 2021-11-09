@@ -17,6 +17,13 @@ namespace Application.model.AppData
         }
     }
 
+    public class ListConversationModel {
+        public IDictionary<string , ConversationModel> talk {get;set;}
+        public ListConversationModel(){
+           talk = new Dictionary<string , ConversationModel>();
+        }
+    }
+
     public class CreateConversation
     {
         public string name { get; set; }

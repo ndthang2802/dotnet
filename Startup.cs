@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Application.helpers;
 using Microsoft.EntityFrameworkCore;
-using Application.model.Authentication;  
+using Application.model;  
 using Application.services.user;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens; 

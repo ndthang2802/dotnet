@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Application.model.Authentication;
 using Application.entities;
 using Application.helpers;
 using System.Collections.Generic;
@@ -87,12 +86,15 @@ namespace Application.services.chat
             }
         }
         
-        public List<ConversationModel> getConversations(string username) 
+        public IDictionary<string , ConversationModel> getConversations(string username) 
         {
 
             User user = _dataContext.Users.FirstOrDefault(u => u.username == username);
             var conversationList = _dataContext.Joins.ToList().GroupBy(j=>j.ConservationId,j => j.UserId,(key, g) => new {ConservationId = key, attendId = g.ToList() }).Where(j => j.attendId.Contains(user.Id));
-            List<ConversationModel> cvs = new List<ConversationModel>();
+            //List<ConversationModel> cvs = new List<ConversationModel>();
+
+            ListConversationModel lcm = new ListConversationModel(); // dictionary idOfConversation : conversation
+
             foreach(var conversation in conversationList){
                 Conversation c = _dataContext.Conversations.FirstOrDefault(c => c.Id == conversation.ConservationId);
                 User ccreator = _dataContext.Users.FirstOrDefault(u => u.Id == c.UserId);
@@ -102,9 +104,12 @@ namespace Application.services.chat
                     UserModel a_ = new UserModel(a.Id,a.username,a.phoneNumber,a.displayName);
                     attendants.Add(a_);
                 }
-                cvs.Add(new ConversationModel(c.Id,c.Name,new UserModel(ccreator.Id,ccreator.username,ccreator.phoneNumber,ccreator.displayName),attendants));
+
+                var cvsModel = new ConversationModel(c.Id,c.Name,new UserModel(ccreator.Id,ccreator.username,ccreator.phoneNumber,ccreator.displayName),attendants);
+
+                lcm.talk.Add(cvsModel.Id, cvsModel);
             }
-            return cvs;
+            return lcm.talk;
         }
 
         

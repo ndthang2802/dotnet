@@ -8,10 +8,16 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 {
     public void OnAuthorization(AuthorizationFilterContext context)
     {
-        var user = context.HttpContext.Items["User"];
-        if (user == null)
-        {
-            context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
+        var isTokenExpired = context.HttpContext.Items["Token_Expired"];
+        if (isTokenExpired != null ) {
+            context.Result = new JsonResult(new { message = "Token has expired" }) { StatusCode = StatusCodes.Status401Unauthorized };
+        }
+        else {
+            var user = context.HttpContext.Items["User"];
+            if (user == null)
+            {
+                context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
+            }
         }
     }
 

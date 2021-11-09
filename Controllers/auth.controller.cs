@@ -1,15 +1,15 @@
 using Application.services.token;
-using Application.model.Authentication;
 using Application.helpers;
 using BC = BCrypt.Net.BCrypt;
-using Application.model;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
 using System;
+using Application.model.AppData;
+using Application.model;
+
 namespace Application.Controllers
 {
 
@@ -61,16 +61,30 @@ namespace Application.Controllers
 
             var success = _dataContext.SaveChanges();
 
+
+            var userInfo = new UserModel(user.Id,user.username,user.phoneNumber,user.displayName);
             
             if (success > 0){
                 return Ok(
                     new {
                         Token = accessToken,
-                        RefreshToken = refreshToken
+                        RefreshToken = refreshToken,
+                        info = userInfo
                     }
                 );
             }
             else {
+                return BadRequest("Something wrong");
+            }
+        }
+        [HttpPost, Route("refresh")]
+
+        public IActionResult refreshToken([FromBody] TokenModel tokenModel ) {
+            try {
+                TokenModel newToken = _tokenService.Refresh(tokenModel.accessToken,tokenModel.refreshToken);
+                return Ok(newToken);
+            }
+            catch {
                 return BadRequest("Something wrong");
             }
         }

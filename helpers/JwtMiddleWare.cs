@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using System.Security.Claims;
+
 
 namespace Application.helpers
 {
@@ -28,6 +30,30 @@ namespace Application.helpers
 
 
             await _next(context);
+        }
+
+        private ClaimsPrincipal GetClaimsPrincipalFromExpriredToken(string token){
+            try {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.UTF8.GetBytes(_config["Jwt:key"]);
+                var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters{
+                    ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidIssuer = _config["Jwt:iss"],
+                        ValidAudience = _config["Jwt:iss"],
+                        ValidateLifetime = false
+                }, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+
+                return principal;
+            }
+            catch {
+                Console.WriteLine("fail");
+                throw new SecurityTokenException("Invalid token");
+            }
         }
 
         private void attachUserToContext(HttpContext context, string token)
@@ -56,10 +82,10 @@ namespace Application.helpers
                 // attach user to context on successful jwt validation
                 context.Items["User"] = username;
             }
-            catch
+            catch (SecurityTokenExpiredException) // token has expired
             {
-                // do nothing if jwt validation fails
-                Console.WriteLine("fail");
+                    
+                context.Items["Token_Expired"] = true;
                 // user is not attached to context so request won't have access to secure routes
             }
         }
