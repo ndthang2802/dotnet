@@ -1,7 +1,6 @@
 using Application.services.user;
 using Microsoft.AspNetCore.Mvc;
 using Application.model;
-using Application.model.AppData;
 namespace Application.Controllers
 {
 
@@ -40,7 +39,7 @@ namespace Application.Controllers
             
         }
         [HttpGet("userInfo")]
-        [Authorize]
+        [AuthorizeAttribute]
         public IActionResult GetUserInfo()
         {
             var userName = HttpContext.Items["User"];

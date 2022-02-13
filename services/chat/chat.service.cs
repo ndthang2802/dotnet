@@ -3,7 +3,7 @@ using System.Linq;
 using Application.entities;
 using Application.helpers;
 using System.Collections.Generic;
-using Application.model.AppData;
+using Application.services.user;
 namespace Application.services.chat
 {
     public class ChatService : IChatService
@@ -13,28 +13,30 @@ namespace Application.services.chat
             this._dataContext = dataContext;
         }
 
-        public ConversationModel createTalk(string userNameofCreator, string NameOfTalk) {
+        public ConversationModel joinInRoom(string username, string IdRoom) {
 
-            User creator = _dataContext.Users.FirstOrDefault(u => u.username == userNameofCreator);
+            User attender = _dataContext.Users.FirstOrDefault(u => u.username == username);
 
             Guid guid = Guid.NewGuid();
 
-            var conversation = new Conversation(guid.ToString(),NameOfTalk,creator.Id.ToString());
+            var conversation = _dataContext.Conversations.FirstOrDefault(c => c.Id == IdRoom);
 
-            var join = new Join();
-            join.UserId = creator.Id;
-            join.ConservationId = conversation.Id;
+            if (conversation == null) {
+                throw new Exception("Room not Exist");
+            }
 
-            _dataContext.Conversations.Add(conversation);
+            var join = new Join(attender.Id,IdRoom);
+
             _dataContext.Joins.Add(join);
 
             var state = _dataContext.SaveChanges();
 
-            List<UserModel> Attendants = new List<UserModel>();
+            User hostUser = _dataContext.Users.FirstOrDefault(u => u.username == conversation.UserId);
+            
 
             if (state > 0)
             {
-                return new ConversationModel(conversation.Id,conversation.Name, new UserModel(creator.Id,creator.username,creator.phoneNumber,creator.displayName), Attendants);
+                return new ConversationModel(conversation.Id,conversation.Name, new UserModel(hostUser.Id,hostUser.username,hostUser.phoneNumber,hostUser.displayName));
             }
             else
             {
@@ -42,43 +44,32 @@ namespace Application.services.chat
             }
         }
 
-        public ConversationModel createDirectTalk(string userNameofUser1,string userNameofUser2) {
-            User user1 = _dataContext.Users.FirstOrDefault(u => u.username == userNameofUser1);
-            User user2 = _dataContext.Users.FirstOrDefault(u => u.username == userNameofUser2);
+        public ConversationModel createRoom(string hostUsername,string roomName) {
+            User user = _dataContext.Users.FirstOrDefault(u => u.username == hostUsername);
 
             Guid guid = Guid.NewGuid();
 
-            var conversation = new Conversation(guid.ToString()," ",user1.Id.ToString());
+            var conversation = new Conversation(guid.ToString(),roomName,user.Id.ToString());
             _dataContext.Conversations.Add(conversation);
 
 
-            var join1 = new Join();
-            join1.UserId = user1.Id;
-            join1.ConservationId = conversation.Id;
-
-            var join2 = new Join();
-            join2.UserId = user2.Id;
-            join2.ConservationId = conversation.Id;
+            var join = new Join(user.Id,conversation.Id);
 
 
-            _dataContext.Joins.Add(join1);
-            _dataContext.Joins.Add(join2);
+            _dataContext.Joins.Add(join);
 
             var state = _dataContext.SaveChanges();
 
             List<UserModel> Attendants = new List<UserModel>();
 
 
-            UserModel p1 = new UserModel(user1.Id,user1.username,user1.phoneNumber,user1.displayName);
-            UserModel p2 = new UserModel(user2.Id,user2.username,user2.phoneNumber,user2.displayName);
+            UserModel hostUser = new UserModel(user.Id,user.username,user.phoneNumber,user.displayName);
 
-            Attendants.Add(p1);
-            Attendants.Add(p2);
 
 
             if (state > 0)
             {
-                return new ConversationModel(conversation.Id,conversation.Name, p1, Attendants);
+                return new ConversationModel(conversation.Id,conversation.Name, hostUser);
             }
             else
             {
@@ -98,14 +89,9 @@ namespace Application.services.chat
             foreach(var conversation in conversationList){
                 Conversation c = _dataContext.Conversations.FirstOrDefault(c => c.Id == conversation.ConservationId);
                 User ccreator = _dataContext.Users.FirstOrDefault(u => u.Id == c.UserId);
-                List<UserModel> attendants = new List<UserModel>();
-                foreach(var attendant in conversation.attendId){
-                    User a = _dataContext.Users.FirstOrDefault(u => u.Id == attendant);
-                    UserModel a_ = new UserModel(a.Id,a.username,a.phoneNumber,a.displayName);
-                    attendants.Add(a_);
-                }
+                
 
-                var cvsModel = new ConversationModel(c.Id,c.Name,new UserModel(ccreator.Id,ccreator.username,ccreator.phoneNumber,ccreator.displayName),attendants);
+                var cvsModel = new ConversationModel(c.Id,c.Name,new UserModel(ccreator.Id,ccreator.username,ccreator.phoneNumber,ccreator.displayName));
 
                 lcm.talk.Add(cvsModel.Id, cvsModel);
             }

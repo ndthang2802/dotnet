@@ -1,5 +1,5 @@
 
-namespace Application.model.AppData
+namespace Application.services.user
 {
     public class UserModel 
     {

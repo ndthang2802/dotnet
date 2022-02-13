@@ -1,19 +1,27 @@
 using System.Collections.Generic;
-namespace Application.model.AppData
+using Application.services.user;
+
+namespace Application.services.chat
 {
+     public class CreateRoom
+    {
+        public string name {get;set;}
+
+        public CreateRoom(string name){
+            this.name = name;
+        }
+    }
     public class ConversationModel 
     {
         public string Id { get; set; }
         public string name {get;set;}
         public UserModel creator {get;set;}
 
-        public List<UserModel> UsersAttend {get;set;} 
 
-        public ConversationModel(string id,string name, UserModel creator, List<UserModel> attendants){
+        public ConversationModel(string id,string name, UserModel creator){
             this.Id = id;
             this.name = name;
             this.creator = creator;
-            this.UsersAttend = attendants;
         }
     }
 
@@ -34,9 +42,9 @@ namespace Application.model.AppData
         public string Id { get; set; }
     }
 
-    public class CreateDirectTalk
+    public class JoinRoom
     {
-        public string Username { get; set; }
+        public string IdRoom { get; set; }
 
     }
 

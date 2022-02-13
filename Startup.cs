@@ -38,12 +38,15 @@ namespace Application
 
             services.AddTransient<DataContext>();
 
+            // Connect database: use SQLite    
             services.AddDbContext<DataContext> (opt => {
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            // signalR
             services.AddSignalR();
-
+            
+            // cors
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>

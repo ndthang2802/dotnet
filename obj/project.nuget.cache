@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "KRiMiGP51f24IyE3pkdqoGNN7iAPHkMMhqO9dzxYp721h2GAopkm9k77p2YDJePl/kN8Bf+WIbBd02L/IJ5c7Q==",
+  "dgSpecHash": "BdOipd4rObZ7E2pjJhYA85JsPp1QU1N56kXeY4H9qwVCr3/X7sOJZ6Pa0QE0YXI+Gc7ApT1oCVXOF3ugHvsvxg==",
   "success": true,
   "projectFilePath": "D:\\fullStackDev - learn\\dotnet\\Application\\Application.csproj",
   "expectedPackageFiles": [
@@ -100,7 +100,8 @@
     "C:\\Users\\ACER\\.nuget\\packages\\system.text.encoding\\4.3.0\\system.text.encoding.4.3.0.nupkg.sha512",
     "C:\\Users\\ACER\\.nuget\\packages\\system.text.encodings.web\\4.5.0\\system.text.encodings.web.4.5.0.nupkg.sha512",
     "C:\\Users\\ACER\\.nuget\\packages\\system.threading.channels\\4.5.0\\system.threading.channels.4.5.0.nupkg.sha512",
-    "C:\\Users\\ACER\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512"
+    "C:\\Users\\ACER\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
+    "C:\\Users\\ACER\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.12\\microsoft.netcore.app.host.win-x64.5.0.12.nupkg.sha512"
   ],
   "logs": []
 }

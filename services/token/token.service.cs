@@ -14,7 +14,7 @@ namespace Application.services.token
 {
     public class TokenService : ITokenService
     {
-        private const double EXPIRY_DURATION_MINUTES = 1;
+        private const double EXPIRY_DURATION_MINUTES = 5;
         private readonly IConfiguration _config;
 
          private DataContext _dataContext;

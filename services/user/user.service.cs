@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Application.model;
-using Application.model.AppData;
 using Application.entities;
 using Application.helpers;
 using BC = BCrypt.Net.BCrypt;

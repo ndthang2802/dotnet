@@ -1,5 +1,4 @@
 using Application.model;
-using Application.model.AppData;
 
 namespace Application.services.user
 {

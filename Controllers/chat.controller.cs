@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.helpers;
 using Application.entities;
 using Application.services.chat;
-using Application.model.AppData;
+using Application.model;
 namespace Application.Controllers
 {
     [Route("api/[controller]")]
@@ -19,23 +19,8 @@ namespace Application.Controllers
         }
 
 
-        [HttpPost("createCoversation")]
-        [Authorize]
-        public IActionResult createConversation([FromBody] CreateConversation conversation)
-        {
-            var creatorUsername = HttpContext.Items["User"].ToString();
-            try {
-                var ConversationModel = _chatService.createTalk(creatorUsername,conversation.name);
-                return Ok(ConversationModel);
-            }
-            catch {
-                return BadRequest("Error");
-            }
-
-
-        }
         [HttpPost("getCoversation")]
-        [Authorize]
+        [AuthorizeAttribute]
 
         public IActionResult getConversation(){
             var username = HttpContext.Items["User"].ToString();
@@ -50,13 +35,27 @@ namespace Application.Controllers
         }
 
 
-        [HttpPost("createDirectTalk")]
-        [Authorize]
-        public IActionResult createDirectTalk([FromBody] CreateDirectTalk user2)
+        [HttpPost("createRoom")]
+        [AuthorizeAttribute]
+        public IActionResult createRoom([FromBody] CreateRoom room)
         {
             var creatorUsername = HttpContext.Items["User"].ToString();
             try {
-                var Conversation = _chatService.createDirectTalk(creatorUsername,user2.Username);
+                var Conversation = _chatService.createRoom(creatorUsername,room.name);
+                return Ok(Conversation);
+            }
+            catch {
+                return BadRequest("Error");
+            }
+        }
+
+        [HttpPost("joinRoom")]
+        [AuthorizeAttribute]
+        public IActionResult joinRoom([FromBody] JoinRoom room)
+        {
+            var creatorUsername = HttpContext.Items["User"].ToString();
+            try {
+                var Conversation = _chatService.joinInRoom(creatorUsername,room.IdRoom);
                 return Ok(Conversation);
             }
             catch {
